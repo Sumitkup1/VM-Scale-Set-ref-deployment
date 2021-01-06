@@ -8,22 +8,22 @@
 
 
 $vmname = "vmss-srv01"
-$rsgname= "servicenowazmidservers-rgp-01"
-$vmssgallery= "vmssmidservers"
+$rsgname= "auevmrgp01"
+$vmssgallery= "auevmssgly01"
 
 ################################################################################################
 $sourceVM = Get-AzVM -Name $vmname -ResourceGroupName $rsgname
 $rsg = Get-AzResourceGroup -Name $rsgname -Location 'australiaeast'
 
 
-$gallery = New-AzGallery -GalleryName $vmssgallery -ResourceGroupName $rsg.ResourceGroupName -Location $rsg.Location -Description 'VMSS Image Gallery for MID ServiceNow'
+$gallery = New-AzGallery -GalleryName $vmssgallery -ResourceGroupName $rsg.ResourceGroupName -Location $rsg.Location -Description 'VMSS Image Gallery'
 
 $Image = New-AzGalleryImageDefinition -GalleryName $gallery.Name -ResourceGroupName $rsg.ResourceGroupName `
    -Location $gallery.Location `
-   -Name 'MIDImageDef' `
+   -Name 'VmssImageDef' `
    -OsState specialized `
    -OsType Windows `
-   -Publisher 'eHealthPublisher' `
+   -Publisher 'OrgPublisher' `
    -Offer 'myOffer' `
    -Sku 'mySKU'
 
@@ -46,25 +46,25 @@ New-AzGalleryImageVersion `
 
 # Define variables for the scale set
 
-$resourceGroupName = "servicenowazmidservers-rgp-01"
-$scaleSetName = "MIDvmss001"
+$resourceGroupName = "auevmssrgp02"
+$scaleSetName = "auevmss001"
 $location = "australiaeast"
-$pipname = "eHealthpip01"
+$pipname = "auevmsspip01"
 
-$vmssgallery= "vmssmidservers"
+$vmssgallery= "auevmssgly01"
 
 $galleryImage = Get-AzGalleryImageDefinition -ResourceGroupName $resourceGroupName -GalleryName $vmssgallery
 
-$vnetname = "Provider-INF-VNET-01"
-$vnetrsg = "Provider-INF-RGP-01"
-$Subnetname = "ServiceNowAZMIDServers-SNET-01" # 10.134.1.128/27 (128 to 159)
+$vnetname = "VNET01"
+$vnetrsg = "aueinfrsg01"
+$Subnetname = "snx001" # 10.134.1.128/27 (128 to 159)
 
 $vnet = Get-AzVirtualNetwork -Name $vnetname
 
 $vnet.Subnets[11]
 
 ## Variables for the commands ##
-$fe = 'VMSSFE01'
+$fe = 'auevmssfe01'
 $ip = '10.134.1.150' ##change this ip address
 
 #change subnet id before running
@@ -97,7 +97,7 @@ $inboundNATPool = New-AzLoadBalancerInboundNatPoolConfig `
 # Create the load balancer and health probe
 $lb = New-AzLoadBalancer `
 -ResourceGroupName $resourceGroupName `
--Name "VMSSMIDLB001" `
+-Name "VMSSLB001" `
 -Location $location `
 -FrontendIpConfiguration $feip `
 -BackendAddressPool $backendPool `

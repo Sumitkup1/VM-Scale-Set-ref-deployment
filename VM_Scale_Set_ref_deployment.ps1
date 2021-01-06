@@ -7,7 +7,7 @@
 #Install-Module -Name PowerShellGet -Force
 
 
-$vmname = "vmssdemo1"
+$vmname = "vmss-srv01"
 $rsgname= "servicenowazmidservers-rgp-01"
 $vmssgallery= "vmssmidservers"
 

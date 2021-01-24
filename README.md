@@ -2,4 +2,4 @@
 
 <TBC>
 
-Script will deploy VMSS in the private network
+Script will deploy VMSS in the private network.

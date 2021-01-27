@@ -12,6 +12,9 @@ $rsgname= "auevmrgp01"
 $vmssgallery= "auevmssgly01"
 
 ################################################################################################
+
+# Capture Image from VM, create image gallery, image definition and version
+
 $sourceVM = Get-AzVM -Name $vmname -ResourceGroupName $rsgname
 $rsg = Get-AzResourceGroup -Name $rsgname -Location 'australiaeast'
 
@@ -22,7 +25,7 @@ $Image = New-AzGalleryImageDefinition -GalleryName $gallery.Name -ResourceGroupN
    -Location $gallery.Location `
    -Name 'VmssImageDef' `
    -OsState specialized `
-   -OsType Windows `
+   -OsType Windows ` # Change OsType to linux if source VM is Linux OS 
    -Publisher 'OrgPublisher' `
    -Offer 'myOffer' `
    -Sku 'mySKU'
@@ -44,6 +47,8 @@ New-AzGalleryImageVersion `
 
 ################################################################################################
 
+## Below code is to deploy internal LB and VMSS using image gallery created in the previous section
+
 # Define variables for the scale set
 
 $resourceGroupName = "auevmssrgp02"
@@ -57,35 +62,22 @@ $galleryImage = Get-AzGalleryImageDefinition -ResourceGroupName $resourceGroupNa
 
 $vnetname = "VNET01"
 $vnetrsg = "aueinfrsg01"
-$Subnetname = "snx001" # 10.134.1.128/27 (128 to 159)
+$Subnetname = "snx001" 
 
 $vnet = Get-AzVirtualNetwork -Name $vnetname
 
 $vnet.Subnets[11]
 
-## Variables for the commands ##
 $fe = 'auevmssfe01'
-$ip = '10.134.1.150' ##change this ip address
+$ip = '10.134.1.150' ## change ip address based on your subnet range
 
-#change subnet id before running
+# Identify subnet id in your vNet and change subnet in below command
 
 $feip = New-AzLoadBalancerFrontendIpConfig -Name $fe -PrivateIpAddress $ip -SubnetId $vnet.subnets[11].Id 
 
-<#
-$publicIP = New-AzPublicIpAddress `
-  -ResourceGroupName $rsgname `
-  -Location $location `
-  -AllocationMethod Static `
-  -Name $pipname
-
-  $frontendIP = New-AzLoadBalancerFrontendIpConfig `
-  -Name "myFrontEndPool" `
-  -PublicIpAddress $publicIP
-  #>
-
 $backendPool = New-AzLoadBalancerBackendAddressPoolConfig -Name "VMSSBEPool01"
 
-#may not be needed
+# (Optional)
 $inboundNATPool = New-AzLoadBalancerInboundNatPoolConfig `
   -Name "RDPRule" `
   -FrontendIpConfigurationId $feip.Id `
@@ -95,6 +87,7 @@ $inboundNATPool = New-AzLoadBalancerInboundNatPoolConfig `
   -BackendPort 3389
 
 # Create the load balancer and health probe
+
 $lb = New-AzLoadBalancer `
 -ResourceGroupName $resourceGroupName `
 -Name "VMSSLB001" `

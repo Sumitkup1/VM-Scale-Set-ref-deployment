@@ -1,4 +1,4 @@
-# VM Scale Set Refrence deployment 
+# VM Scale Set deployment Script
 
 Script will deploy VMSS using Custom Image. VMSS scale set will be created in the private vNet with Azure Internal load balancer.
 

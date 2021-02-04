@@ -1,11 +1,9 @@
 # 04 Jan 2021 - Sumit Kumar
 
-# Script custom image for virtual machine scale sets with Azure PowerShell
+# Deploy Azure Scale set in your private vNet using custom image (without domain joined)
 
-#Install-Module -Name Az -AllowClobber -Force
-#$PSVersionTable.PSVersion
-#Install-Module -Name PowerShellGet -Force
 
+# Define variables for VM scale set
 
 $vmname = "vmss-srv01"
 $rsgname= "auevmrgp01"

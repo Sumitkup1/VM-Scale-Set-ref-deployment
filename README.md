@@ -1,4 +1,4 @@
-# VM Scale Set Reference Script
+# VM Scale Set Reference Scripts
 
 ## VM_Scale_Set_ref_arch01.ps1 
 

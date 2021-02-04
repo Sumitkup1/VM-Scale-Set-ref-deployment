@@ -5,7 +5,7 @@
 
 # Define variables for VMSS
 
-$rgName = "smc_lhd_migrate01"
+$rgName = "az_migrate01"
 $location = "australiaeast"
 $lbname = "VMSSLB001"
 

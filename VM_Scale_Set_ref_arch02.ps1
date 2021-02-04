@@ -60,7 +60,7 @@ $inboundNATPool = New-AzLoadBalancerInboundNatPoolConfig `
   -Protocol TCP `
   -FrontendPortRangeStart 50001 `
   -FrontendPortRangeEnd 50010 `
-  -BackendPort 338
+  -BackendPort 3389
 
 $lb = New-AzLoadBalancer `
 -ResourceGroupName $rgName `
